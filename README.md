@@ -26,7 +26,7 @@ oc project <namespace>
 ```
 oc adm policy add-scc-to-user privileged -z default -n <release_name>
 ```
-Now switch to the project folder that lies within the OKD cluster and click on "Deployments". You'll see three different deployments called "cvat-backend", "cvat-frontend" and "cvat-opa". At this point, we have yet to find out how to repair "cvat-opa", but in order to repair both "cvat-backend" and "cvat-frontend", we can do the  following:
+Now switch to the project folder that lies within the OKD cluster and click on "Deployments". You'll see three different deployments called "cvat-backend", "cvat-frontend" and "cvat-opa". In order to repair both of the associated pods, we can do the following:
 
 4. Click on the respective YAML file. Again, we want to modify the security context constraints by adding this line
 ```
@@ -66,3 +66,15 @@ to
 imagePullPolicy: IfNotPresent
 ```
 Restarting the respective Deployments should now yield a running cvat-backend and cvat-frontend pod.
+
+The "cvat opa" pod is broken too. This is due to the fact that we're calling the file "/rules/rules.tar.gz" in the context of 
+```
+args:
+  - run
+  - '--server'
+  - '--addr'
+  - ':8181'
+  - '--set=decision_logs.console=true'
+  - '/rules/rules.tar.gz'
+```
+but the file itself is broken (or probably not even existing because it can't be found in the CVAT github repo). Throwing it out at least starts the pod. We have yet to find out if we actually need the file or not though.
