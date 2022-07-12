@@ -66,15 +66,3 @@ to
 imagePullPolicy: IfNotPresent
 ```
 Restarting the respective Deployments should now yield a running cvat-backend and cvat-frontend pod.
-
-The "cvat opa" pod is broken too. This is due to the fact that we're calling the file "/rules/rules.tar.gz" in the context of 
-```
-args:
-  - run
-  - '--server'
-  - '--addr'
-  - ':8181'
-  - '--set=decision_logs.console=true'
-  - '/rules/rules.tar.gz'
-```
-but the file itself is broken (or probably not even existing because it can't be found in the CVAT github repo). Throwing it out at least starts the pod. We have yet to find out if we actually need the file or not though.
