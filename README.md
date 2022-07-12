@@ -24,7 +24,7 @@ oc project <namespace>
 3. We need to take care of some security issues from here on. The first step is to change the security context constraints of the whole project:
 
 ```
-oc adm policy add-scc-to-user privileged -z default -n <release_name>
+oc adm policy add-scc-to-user privileged -z default -n <namespace>
 ```
 Now switch to the project folder that lies within the OKD cluster and click on "Deployments". You'll see three different deployments called "cvat-backend", "cvat-frontend" and "cvat-opa". In order to repair both of the associated pods, we can do the following:
 
